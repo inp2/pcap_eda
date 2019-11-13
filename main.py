@@ -22,9 +22,9 @@ def viz(df):
 	ax = df['eth.src'].value_counts().nlargest(10).plot.bar(x='Eth Src', y='Value', rot=45)
 	fig = ax.get_figure()
 	fig.savefig('static/images/eth_src.png')
-        ax1 = df['eth.dst'].value_counts().nlargest(10).plot.bar(x='Eth Dst', y='Value', rot=45)
-        fig = ax1.get_figure()
-        fig.savefig('static/images/eth_dst.png')
+	ax1 = df['eth.dst'].value_counts().nlargest(10).plot.bar(x='Eth Dst', y='Value', rot=45)
+	fig = ax1.get_figure()
+	fig.savefig('static/images/eth_dst.png')
 		    
 @app.route('/')
 def upload_form():
@@ -44,9 +44,9 @@ def upload_file():
 		if file and allowed_file(file.filename):
 			filename = secure_filename(file.filename)
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			flash('File: ' + filename + ' successfully uploaded')
+			#flash('File: ' + filename + ' successfully uploaded')
 			df = pcap_parser(filename)
-			p = Process(target=viz, args=(df))
+			p = Process(target=viz, args=df)
 			p.start()
 			p.join()
 			return render_template('viz.html', name='Frequency of Ethernet Src', url='static/images/eth_src.png', name1='Frequency of Ethernet Dst', url1='static/images/eth_dst.png')
