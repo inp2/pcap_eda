@@ -19,18 +19,27 @@ def pcap_parser(filename):
 	return df
 
 def viz(df):
-	ax = df['eth.src'].value_counts().nlargest(10).plot.bar(x='Eth Src', y='Value', rot=45)
-	fig = ax.get_figure()
-	fig.savefig('static/images/eth_src.png')
-	ax1 = df['eth.dst'].value_counts().nlargest(10).plot.bar(x='Eth Dst', y='Value', rot=45)
-	fig = ax1.get_figure()
-	fig.savefig('static/images/eth_dst.png')
+        ax = df['eth.src'].value_counts().nlargest(10).plot.bar(x='Eth Src', y='Value', rot=0)
+        fig = ax.get_figure()
+        fig.savefig('static/images/eth_src.png')
+        ax1 = df['eth.dst'].value_counts().nlargest(10).plot.bar(x='Eth Dst', y='Value', rot=0)
+        fig = ax1.get_figure()
+        fig.savefig('static/images/eth_dst.png')
+        ax2 = df['ip.src'].value_counts().nlargest(10).plot.bar(x='IP Src', y='Value', rot=0)
+        fig = ax2.get_figure()
+        fig.savefig('static/images/ip_src.png')
+        ax3= df['ip.dst'].value_counts().nlargest(10).plot.bar(x='IP Dst', y='Value', rot=0)
+        fig = ax3.get_figure()
+        fig.savefig('static/images/ip_dst.png')
+        ax4 = df['ip.proto'].value_counts().nlargest(10).plot.bar(x='Protocol', y='Value', rot=0)
+        fig = ax.get_figure()
+        fig.savefig('static/images/protocol.png')
 		    
 @app.route('/')
 def upload_form():
 	return render_template('upload.html')
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['POST', 'GET'])
 def upload_file():
 	if request.method == 'POST':
 	# check if the post request has the file part
@@ -46,10 +55,8 @@ def upload_file():
 			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 			#flash('File: ' + filename + ' successfully uploaded')
 			df = pcap_parser(filename)
-			p = Process(target=viz, args=df)
-			p.start()
-			p.join()
-			return render_template('viz.html', name='Frequency of Ethernet Src', url='static/images/eth_src.png', name1='Frequency of Ethernet Dst', url1='static/images/eth_dst.png')
+			viz(df)
+			return render_template('viz.html', name='Frequency of Ethernet Src', url='static/images/eth_src.png', name1='Frequency of Ethernet Dst', url1='static/images/eth_dst.png', name2='Frequency of IP Src', url2='static/images/ip_src.png', name3='Frequency of IP Dst', url3='static/images/ip_dst.png', name4='Frequency of Protocols', url4='static/images/protocol.png')
 		else:
 			flash('Allowed file types are pcap')
 			return redirect(request.url)
