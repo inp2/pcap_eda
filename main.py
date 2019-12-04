@@ -29,6 +29,7 @@ def net_analy(df):
         plt.bar(len(ip_deg), list(ip_deg.values()))
         plt.savefig('static/images/ip_deg.png')
         
+        
 def viz(df):
         ax = df['eth.src'].value_counts().nlargest(10).plot.bar(x='Eth Src', y='Value', rot=0)
         fig = ax.get_figure()
