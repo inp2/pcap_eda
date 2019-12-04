@@ -1,13 +1,10 @@
 import os
-from multiprocessing import Process
 import pandas as pd
 import urllib.request
 from app import app
 from flask import Flask, flash, request, redirect, render_template
 from werkzeug.utils import secure_filename
 import matplotlib.pyplot as plt
-import seaborn as sns
-import networkx as nx
 
 ALLOWED_EXTENSIONS = set(['pcap'])
 
